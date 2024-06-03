@@ -16,7 +16,7 @@
 
 		- Despliegue de Pod  -> [PostgreSQL](http://padd724a8eff214e79b204af9183744f1-1982455500.us-east-2.elb.amazonaws.com "PostgreSQL") (No se muestra nada en el navegador, pero se podran conectar utilizando algún gestor como DBeaver)
 
-    Accesible desde otro Pod dentro del Cluster -> Pod FastApi a PostgreSQL
+    Accesible desde otro Pod dentro del Cluster -> Pod FastApi a PostgreSQL (Imagen):
 
 ![Conexión a la DB](https://github.com/roodrigoroot69/deploy-pods/blob/main/app/captura.jpg?raw=true "a title")
 

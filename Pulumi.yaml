@@ -1,0 +1,179 @@
+name: rapi-pods
+runtime: yaml
+
+description: An EKS cluster
+variables:
+  appName: my-app
+  reactName: react
+
+resources:
+  repository:
+    type: awsx:ecr:Repository
+
+  repositorydb:
+    type: aws:ecr:Repository
+    properties:
+      name: dbrepo
+
+  repositoryreact:
+    type: aws:ecr:Repository
+    properties:
+      name: reactrepo
+
+  image:
+    type: awsx:ecr:Image
+    properties:
+      repositoryUrl: ${repository.url}
+      context: "./app"
+      platform: "linux/amd64"
+
+  imagereact:
+    type: awsx:ecr:Image
+    properties:
+      repositoryUrl: ${repositoryreact.repositoryUrl}
+      context: "./app2"
+      platform: "linux/amd64"
+
+  imagedb:
+    type: awsx:ecr:Image
+    properties:
+      repositoryUrl: ${repositorydb.repositoryUrl}
+      context: "./app3"
+      platform: "linux/amd64"
+
+  cluster:
+    type: eks:Cluster
+
+  clusterProvider:
+    type: pulumi:providers:kubernetes
+    properties:
+      kubeconfig: ${cluster.kubeconfigJson}
+      enableServerSideApply: true
+
+  deployment:
+    type: kubernetes:apps/v1:Deployment
+    properties:
+      metadata:
+        labels:
+          appClass: ${appName}
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            appClass: ${appName}
+        template:
+          metadata:
+            labels:
+              appClass: ${appName}
+          spec:
+            containers:
+              - name: ${appName}
+                image: ${image.imageUri}
+                ports:
+                  - name: http
+                    containerPort: 8000
+    options:
+      provider: ${clusterProvider}
+
+  deployment2:
+    type: kubernetes:apps/v1:Deployment
+    properties:
+      metadata:
+        labels:
+          appClass: ${reactName}
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            appClass: ${reactName}
+        template:
+          metadata:
+            labels:
+              appClass: ${reactName}
+          spec:
+            containers:
+              - name: ${reactName}
+                image: ${imagereact.imageUri}
+                ports:
+                  - name: http
+                    containerPort: 3000  # Changed port from 80 to 8000
+
+  postgresDeployment:
+    type: kubernetes:apps/v1:Deployment
+    properties:
+      metadata:
+        name: postgresql
+        labels:
+          app: postgresql
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: postgresql
+        template:
+          metadata:
+            labels:
+              app: postgresql
+          spec:
+            containers:
+              - name: postgresql
+                image: postgres:13
+                ports:
+                  - containerPort: 5432
+                env:
+                  - name: POSTGRES_DB
+                    value: rappi
+                  - name: POSTGRES_USER
+                    value: kubernetes
+                  - name: POSTGRES_PASSWORD
+                    value: kubernetes123
+
+  service:
+    type: kubernetes:core/v1:Service
+    properties:
+      metadata:
+        labels:
+          appClass: ${appName}
+      spec:
+        type: LoadBalancer
+        selector:
+          appClass: ${appName}
+        ports:
+          - port: 8000
+            targetPort: http
+    options:
+      provider: ${clusterProvider}
+
+  servicereact:
+    type: kubernetes:core/v1:Service
+    properties:
+      metadata:
+        labels:
+          appClass: ${reactName}
+      spec:
+        type: LoadBalancer
+        selector:
+          appClass: ${reactName}
+        ports:
+          - port: 3000
+            targetPort: http
+    options:
+      provider: ${clusterProvider}
+
+  postgresService:
+    type: kubernetes:core/v1:Service
+    properties:
+      metadata:
+        name: postgresql
+        labels:
+          app: postgresql
+      spec:
+        type: LoadBalancer
+        ports:
+          - port: 5432
+            targetPort: 5432
+        selector:
+          app: postgresql
+outputs:
+  url: http://${service.status.loadBalancer.ingress[0].hostname}
+  reacturl: http://${servicereact.status.loadBalancer.ingress[0].hostname}

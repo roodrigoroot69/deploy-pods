@@ -3,13 +3,18 @@
 **Requisitos:**
 - Desplegar 3 pods
 	- FastApi
-		   *Desplegar app FastApi en el puero 8000 -> [Pods despleago](http://a450e27f95a1f4204be6c7c9831f96d8-327780230.us-east-2.elb.amazonaws.com:8000/ "Pods despleago")
-		  *Endpoint que devuelva un mensaje JSON -> [Endpoint](http://a450e27f95a1f4204be6c7c9831f96d8-327780230.us-east-2.elb.amazonaws.com:8000/items/10 "Endpoint")
+
+        - Desplegar app FastApi en el puero 8000 -> [Pods despleago](http://a450e27f95a1f4204be6c7c9831f96d8-327780230.us-east-2.elb.amazonaws.com:8000/ "Pods despleago")
+		 
+        - Endpoint que devuelva un mensaje JSON -> [Endpoint](http://a450e27f95a1f4204be6c7c9831f96d8-327780230.us-east-2.elb.amazonaws.com:8000/items/10 "Endpoint")
 
     - ReactJS:
+
 		 [Despliegue de Pod y Accesible fuera del cluster mediante el LoadBalancer](http://accbf4a15c4e945689428d3511feace2-468035719.us-east-2.elb.amazonaws.com:3000/ "Despliegue de Pod y Accesible fuera del cluster mediante el LoadBalancer")
+
 	- PostgreSQL
-		Despliegue de Pod  -> [PostgreSQL](http://padd724a8eff214e79b204af9183744f1-1982455500.us-east-2.elb.amazonaws.com "PostgreSQL") (No se muestra nada en el navegador, pero se podran conectar utilizando algún gestor como DBeaver)
+
+		- Despliegue de Pod  -> [PostgreSQL](http://padd724a8eff214e79b204af9183744f1-1982455500.us-east-2.elb.amazonaws.com "PostgreSQL") (No se muestra nada en el navegador, pero se podran conectar utilizando algún gestor como DBeaver)
 
     Accesible desde otro Pod dentro del Cluster -> Pod FastApi a PostgreSQL
 
@@ -37,11 +42,4 @@ Podemos utilizar cloudwatch para ver los logs que se esten generando.
 Tanto como los errores o algún mensaje que se necesite agregar, a su vez podemos configurar alertas para que notifiquen en caso de error o bien algún escenario en especifico.
 
 Otra que también podemos usar es Sentry.io que también nos puede ayudar de la misma manera que cloudwatch, pero proporcinando incluso más contexto o apoyo con los errores
-
-
-
-
-
-
-
 

@@ -9,7 +9,7 @@
     - ReactJS:
 		 [Despliegue de Pod y Accesible fuera del cluster mediante el LoadBalancer](http://accbf4a15c4e945689428d3511feace2-468035719.us-east-2.elb.amazonaws.com:3000/ "Despliegue de Pod y Accesible fuera del cluster mediante el LoadBalancer")
 	- PostgreSQL
-		Despliegue de Pod  -> [PostgreSQL](http://padd724a8eff214e79b204af9183744f1-1982455500.us-east-2.elb.amazonaws.com "PostgreSQL")
+		Despliegue de Pod  -> [PostgreSQL](http://padd724a8eff214e79b204af9183744f1-1982455500.us-east-2.elb.amazonaws.com "PostgreSQL") (No se muestra nada en el navegador, pero se podran conectar utilizando algún gestor como DBeaver)
 
     Accesible desde otro Pod dentro del Cluster -> Pod FastApi a PostgreSQL
 
